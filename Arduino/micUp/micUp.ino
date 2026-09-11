@@ -11,6 +11,7 @@ void loop() {
   int micValue = analogRead(micPin);
   if (micValue>maxVal){
     maxVal = micValue;
+    Serial.println(maxVal);
   }
   else {
     count ++;
@@ -19,5 +20,5 @@ void loop() {
       count = 0;
     }
   }
-  Serial.println(maxVal);
+
 }
