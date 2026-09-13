@@ -1,6 +1,6 @@
 const int micPin = A0; 
 int maxVal = 0; 
-int counter = 0;
+int count = 0;
 
 void setup() {
   Serial.begin(9600);
@@ -8,14 +8,15 @@ void setup() {
 }
 
 void loop() {
-  int micValue = analogRed(micPin);
+  int micValue = analogRead(micPin);
   if (micValue>maxVal){
-    maxVal = micVal
+    maxVal = micValue;
+    Serial.println(maxVal);
   }
   else {
     count ++;
     if(count == 10) {
-      maxval = maxval-1;
+      maxVal = maxVal-1;
       count = 0;
     }
   }
