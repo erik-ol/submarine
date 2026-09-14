@@ -5,7 +5,7 @@ using System;
 
 public class ArduinoConnector : MonoBehaviour
 {
-    SerialPort serial = new SerialPort("COM3", 9600);   
+    SerialPort serial = new SerialPort("COM5", 9600);   
     int micBaseline;
     Vector3 initialPosition;
     float sinkSpeed = 5f; 
