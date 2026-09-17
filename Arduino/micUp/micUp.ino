@@ -1,6 +1,12 @@
 const int micPin = A0; 
+<<<<<<< Updated upstream
 int maxVal = 0; 
 int count = 0;
+=======
+const int potPin = A3;
+int micMaxVal = 0; 
+int micCount = 0;
+>>>>>>> Stashed changes
 
 void setup() {
   Serial.begin(9600);
@@ -21,4 +27,11 @@ void loop() {
     }
   }
 
+<<<<<<< Updated upstream
+=======
+  int potValue = analogRead(potPin);
+  Serial.print("Potentiometer: ");
+  Serial.println(potValue);
+
+>>>>>>> Stashed changes
 }
