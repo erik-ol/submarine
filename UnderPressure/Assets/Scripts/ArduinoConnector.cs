@@ -8,10 +8,6 @@ public class ArduinoConnector : MonoBehaviour
     SerialPort serial = new SerialPort("COM3", 9600);   
     int micBaseline;
     Vector3 initialPosition;
-<<<<<<< Updated upstream
-    float sinkSpeed = 5f; 
-    float sensitivity = 5f; // Adjust this value to change the sensitivity of the movement
-=======
     float floatSpeed = 0f;
     float sinkSpeed = 0f;
     float sensitivity = 2f; // Adjust this value to change the sensitivity of the movement
@@ -19,15 +15,10 @@ public class ArduinoConnector : MonoBehaviour
     float bottom = 0f;
     Vector3 target;
 
->>>>>>> Stashed changes
     void Start()
     { 
         serial.Open();
         serial.ReadTimeout = 50;
-<<<<<<< Updated upstream
-        micBaseline = int.Parse(serial.ReadLine());
-        Debug.Log("baseline: " +micBaseline);
-=======
         string initalData = serial.ReadLine();
         string [] initialInput = initalData.Split(':');
         if (initialInput[0] == "Microphone")
@@ -40,7 +31,6 @@ public class ArduinoConnector : MonoBehaviour
             micBaseline = 770; //the baseline often seems to be around here
             Debug.Log("No baseline found: " +micBaseline);  
         }
->>>>>>> Stashed changes
         initialPosition = transform.position;
     }
 
@@ -62,8 +52,6 @@ public class ArduinoConnector : MonoBehaviour
         Debug.Log("value: " + value);
        if (value > micBaseline + 100)
         {
-<<<<<<< Updated upstream
-=======
 
             //turning the value into int
             int value = int.Parse(input[1]);
@@ -140,7 +128,6 @@ public class ArduinoConnector : MonoBehaviour
             {
                 transform.position = target;
             }
->>>>>>> Stashed changes
             
             float yOffset = value*sensitivity/1023f;
             Debug.Log("yOffset: " + yOffset);
