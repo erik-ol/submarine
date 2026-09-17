@@ -3,9 +3,10 @@ using System.IO.Ports;
 using System;
 
 
+
 public class ArduinoConnector : MonoBehaviour
 {
-    SerialPort serial = new SerialPort("COM3", 9600);   
+    SerialPort serial = new SerialPort("COM5", 9600);   
     int micBaseline;
     Vector3 initialPosition;
     float floatSpeed = 0f;
@@ -47,10 +48,11 @@ public class ArduinoConnector : MonoBehaviour
         {
             return;
         }
-        //turning the value into int
-        int value = int.Parse(data);
-        Debug.Log("value: " + value);
-       if (value > micBaseline + 100)
+
+        //splitting the string into what type of input it is
+        string[] input = data.Split(':'); //e.g. input "microphone: 832"
+
+        if (input[0] == "Microphone")
         {
 
             //turning the value into int
@@ -134,16 +136,33 @@ public class ArduinoConnector : MonoBehaviour
             transform.position +=  new Vector3(0, yOffset, 0); //the 100 is the range for height, so we change this depending on the depth of the water
         }
 
-        if (transform.position.y > initialPosition.y) // slowly go down to the initial hight
+        if (input[0] == "Potentiometer")
         {
-            Vector3 target = new Vector3(transform.position.x, initialPosition.y, transform.position.z);
-            transform.position = Vector3.MoveTowards(transform.position, target, sinkSpeed*Time.deltaTime);
-
-            // snap once close enough
-            if (Mathf.Abs(transform.position.y - initialPosition.y) < 0.001f)
+            //turning the value into int
+            int value = int.Parse(input[1]);
+            Debug.Log("potvalue: " + value);
+            if (value > micBaseline + 100)
             {
-                transform.position = target;
+                    
+                    float yOffset = value*sensitivity/1023f;
+                    Debug.Log("yOffset: " + yOffset);
+                    
+                    transform.position -=  new Vector3(0, yOffset, 0); //the 100 is the range for height, so we change this depending on the depth of the water
             }
+
+            if (transform.position.y < initialPosition.y) // slowly go down to the initial hight
+            {
+                Vector3 target = new Vector3(transform.position.x, initialPosition.y, transform.position.z);
+                transform.position = Vector3.MoveTowards(transform.position, target, sinkSpeed*Time.deltaTime);
+
+                // snap once close enough
+                if (Mathf.Abs(transform.position.y - initialPosition.y) < 0.001f)
+                {
+                    transform.position = target;
+                }
+            }
+            
         }
+        
     }
 }

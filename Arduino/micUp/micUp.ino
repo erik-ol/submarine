@@ -6,19 +6,21 @@ int micCount = 0;
 void setup() {
   Serial.begin(9600);
   pinMode(micPin, INPUT);
+  pinMode(potPin, INPUT);
 }
 
 void loop() {
   int micValue = analogRead(micPin);
-  if (micValue>maxVal){
-    maxVal = micValue;
-    Serial.println(maxVal);
+  if (micValue>micMaxVal){
+    micMaxVal = micValue;
+    Serial.print("Microphone: ");
+    Serial.println(micMaxVal);
   }
   else {
-    count ++;
-    if(count == 10) {
-      maxVal = maxVal-1;
-      count = 0;
+    micCount ++;
+    if(micCount == 10) {
+      micMaxVal = micMaxVal-1;
+      micCount = 0;
     }
   }
 
