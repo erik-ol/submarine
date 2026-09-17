@@ -2,7 +2,6 @@ const int micPin = A0;
 const int potPin = A3;
 int micMaxVal = 0; 
 int micCount = 0;
-int potLastVal = 0; 
 
 void setup() {
   Serial.begin(9600);
@@ -26,11 +25,7 @@ void loop() {
   }
 
   int potValue = analogRead(potPin);
-  if (potValue != potLastVal)
-  {
-    Serial.print("Potentiometer: ");
-    Serial.println(potValue);
-    potLastVal = potValue;
-  }
+  Serial.print("Potentiometer: ");
+  Serial.println(potValue);
 
 }
