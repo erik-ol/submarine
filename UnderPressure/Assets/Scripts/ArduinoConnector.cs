@@ -22,7 +22,7 @@ public class ArduinoConnector : MonoBehaviour
     float sinkSpeed = 0f;
     float sensitivity = 2f; // Adjust this value to change the sensitivity of the movement
     float surface = 50f;
-    float bottom = 0f;
+    float bottom = 15f; //for demo purposes
     Vector3 target;
 
 
@@ -39,7 +39,7 @@ public class ArduinoConnector : MonoBehaviour
         }
         else
         {
-            micBaseline = 770; //the baseline often seems to be around here
+            micBaseline = 0; //the baseline often seems to be around here
             Debug.Log("No baseline found: " +micBaseline);  
         }
         initialPosition = transform.position;
@@ -121,21 +121,26 @@ public class ArduinoConnector : MonoBehaviour
         {
 
             Debug.Log("micvalue: " + micValue);
-            if (micValue < micBaseline + 50)
+            if (micBaseline == 0)
+            { 
+                micBaseline = micValue;
+                Debug.Log("micbaseline: " + micBaseline);
+            }
+            if (micValue < micBaseline + 40)
             {
                 floatSpeed = 0f;
             }
-            else if (micValue > micBaseline + 50 && micValue < micBaseline+100)
-            {
-                floatSpeed = 1.0f;
-            }
-            else if (micValue > micBaseline + 100 && micValue <micBaseline+150)
+            else if (micValue > micBaseline + 40 && micValue < micBaseline+80)
             {
                 floatSpeed = 1.5f;
             }
-            else if (micValue > micBaseline + 150)
+            else if (micValue > micBaseline + 80 && micValue <micBaseline+120)
             {
                 floatSpeed = 2.0f;
+            }
+            else if (micValue > micBaseline + 120)
+            {
+                floatSpeed = 3.0f;
             }
             
 
