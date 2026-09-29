@@ -47,6 +47,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Boid
   velocity: {x: 0, y: 0, z: 0}
+  speed: 1
 --- !u!33 &-6404465736551696259
 MeshFilter:
   m_ObjectHideFlags: 0
