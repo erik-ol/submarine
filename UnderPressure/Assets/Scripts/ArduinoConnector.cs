@@ -1,20 +1,30 @@
 using UnityEngine;
 using System.IO.Ports;
 using System;
+using System.Threading;
 
 
 
 public class ArduinoConnector : MonoBehaviour
 {
-    SerialPort serial = new SerialPort("COM11", 9600);   
+    SerialPort serial = new SerialPort("COM11", 9600);
+    Thread serialThread;
+    bool keepReading = true;
+    readonly object stateLock = new object();
+    int latestMicValue;
+    bool hasNewMicValue = false;
+    int latestPotValue;
+    bool hasNewPotValue = false;
+
     int micBaseline;
     Vector3 initialPosition;
     float floatSpeed = 0f;
     float sinkSpeed = 0f;
     float sensitivity = 2f; // Adjust this value to change the sensitivity of the movement
     float surface = 50f;
-    float bottom = 0f;
+    float bottom = 15f; //for demo purposes
     Vector3 target;
+
 
     void Start()
     { 
@@ -29,50 +39,108 @@ public class ArduinoConnector : MonoBehaviour
         }
         else
         {
-            micBaseline = 770; //the baseline often seems to be around here
+            micBaseline = 0; //the baseline often seems to be around here
             Debug.Log("No baseline found: " +micBaseline);  
         }
         initialPosition = transform.position;
+        serialThread = new Thread(SerialReadLoop);
+        serialThread.IsBackground = true;
+        serialThread.Start();
     }
 
+    void SerialReadLoop()
+    {
+        while (keepReading)
+        {
+            string line;
+            try
+            {
+                line = serial.ReadLine();
+            }
+            catch (TimeoutException)
+            {
+                continue;
+            }
+            catch (Exception)
+            {
+                break;
+            }
+
+            string[] input = line.Split(':');
+
+            if (input[0] == "Microphone" && int.TryParse(input[1], out int micValue))
+            {
+                Debug.Log("entered if mic");
+                lock (stateLock)
+                {
+                    latestMicValue = micValue;
+                    hasNewMicValue = true;
+                    Debug.Log("new mic value");
+                }
+            }
+
+            else if (input[0] == "Potentiometer" && int.TryParse(input[1], out int potValue))
+            {
+                Debug.Log("entered if pot");
+                lock (stateLock)
+                {
+                    latestPotValue = potValue;
+                    hasNewPotValue = true;
+                    Debug.Log("new pot value");
+                }
+            }
+        }
+    }
+   
     
     void Update()
     {
-        //reading the data from arduino
-        string data; 
-        try
+
+        int micValue = 0;
+        int potValue = 0;
+        bool gotMicValue = false;
+        bool gotPotValue = false;
+
+        lock (stateLock)
         {
-            data = serial.ReadLine();
+            if (hasNewMicValue)
+            {
+                micValue = latestMicValue;
+                gotMicValue = true;
+                hasNewMicValue = false;
+            }
+            if (hasNewPotValue)
+            {
+                potValue = latestPotValue;
+                gotPotValue = true;
+                hasNewMicValue = false;
+            }
         }
-        catch (TimeoutException)
-        {
-            return;
-        }
 
-        //splitting the string into what type of input it is
-        string[] input = data.Split(':'); //e.g. input "microphone: 832"
-
-        if (input[0] == "Microphone")
+        if (gotMicValue)
         {
 
-            //turning the value into int
-            int value = int.Parse(input[1]);
-            Debug.Log("micvalue: " + value);
-            if (value < micBaseline + 50)
+            Debug.Log("micvalue: " + micValue);
+            if (micBaseline == 0)
+            { 
+                micBaseline = micValue;
+                Debug.Log("micbaseline: " + micBaseline);
+            }
+            if (micValue < micBaseline + 40)
             {
                 floatSpeed = 0f;
             }
-            else if (value > micBaseline + 50 && value<micBaseline+100)
-            {
-                floatSpeed = 1.0f;
-            }
-            else if (value > micBaseline + 100 && value<micBaseline+150)
+            else if (micValue > micBaseline + 40 && micValue < micBaseline+80)
             {
                 floatSpeed = 1.5f;
             }
-            else if (value > micBaseline + 150)
+            else if (micValue > micBaseline + 80 && micValue <micBaseline+120)
             {
                 floatSpeed = 2.0f;
+            }
+            else if (micValue > micBaseline + 120)
+            {
+                floatSpeed = 3.0f;
             }
             
 
@@ -88,35 +156,34 @@ public class ArduinoConnector : MonoBehaviour
 
         }
 
-        if (input[0] == "Potentiometer")
+        if (gotPotValue)
         {
-            int value = int.Parse(input[1]);
-            Debug.Log("potvalue: " + value);
-            if (value < 128)
+            Debug.Log("potvalue: " + potValue);
+            if (potValue < 128)
             {
                 sinkSpeed = 0f;
             }
-            else if (value > 256)
+            else if (potValue > 256)
             {
                 sinkSpeed = 0.75f;
             }
-            else if (value > 384)
+            else if (potValue > 384)
             {
                 sinkSpeed = 1.0f;
             }
-            else if (value > 512)
+            else if (potValue > 512)
             {
                 sinkSpeed = 1.25f;
             }
-            else if (value > 640)
+            else if (potValue > 640)
             {
                 sinkSpeed = 1.5f;
             }
-            else if (value > 768)
+            else if (potValue > 768)
             {
                 sinkSpeed = 1.75f;
             }
-            else if (value > 896)
+            else if (potValue > 896)
             {
                 sinkSpeed = 2.0f;
             }
@@ -126,7 +193,7 @@ public class ArduinoConnector : MonoBehaviour
             transform.position = Vector3.MoveTowards(transform.position, target, sinkSpeed*Time.deltaTime); 
 
             // snap once close enough
-            if (Mathf.Abs(transform.position.y - surface) < 0.001f)
+            if (Mathf.Abs(transform.position.y - bottom) < 0.001f)
             {
                 transform.position = target;
             }
@@ -136,5 +203,18 @@ public class ArduinoConnector : MonoBehaviour
 
        
         
+    }
+
+   void OnApplicationQuit()
+    {
+        keepReading = false;
+        if (serialThread != null && serialThread.IsAlive)
+        {
+            serialThread.Join(200);
+        }
+        if (serial!= null && serial.IsOpen)
+        {
+            serial.Close();
+        }
     }
 }
