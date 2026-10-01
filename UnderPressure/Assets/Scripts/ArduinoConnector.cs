@@ -17,12 +17,10 @@ public class ArduinoConnector : MonoBehaviour
     bool hasNewPotValue = false;
 
     int micBaseline;
-    Vector3 initialPosition;
     float floatSpeed = 0f;
     float sinkSpeed = 0f;
-    float sensitivity = 2f; // Adjust this value to change the sensitivity of the movement
     float surface = 50f;
-    float bottom = 15f; //for demo purposes
+    float bottom = 0f; 
     Vector3 target;
 
 
@@ -42,12 +40,23 @@ public class ArduinoConnector : MonoBehaviour
             micBaseline = 0; //the baseline often seems to be around here
             Debug.Log("No baseline found: " +micBaseline);  
         }
-        initialPosition = transform.position;
         serialThread = new Thread(SerialReadLoop);
         serialThread.IsBackground = true;
         serialThread.Start();
     }
 
+    public void UpdateBottom(Vector3 hitpoint)
+    {   
+        if (hitpoint.y > 0)
+        {
+            bottom = hitpoint.y+1;//1 is the thickness of the submarine
+            Debug.Log("new bottom is here");
+        }
+        else
+        { 
+            bottom = 1; 
+        }
+    }
     void SerialReadLoop()
     {
         while (keepReading)
