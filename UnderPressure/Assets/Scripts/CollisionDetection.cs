@@ -6,7 +6,7 @@ public class CollisionDetection : MonoBehaviour
     Vector3 offset = new Vector3(0, 0, 5);
     Vector3 p1;
     Vector3 p2;
-    float radius = 0.5f;
+    float radius = 2.0f;
     float maxDistance= 100.0f;
     Vector3 lastHitPoint;
     [SerializeField] LayerMask terrainMask;
@@ -34,6 +34,15 @@ public class CollisionDetection : MonoBehaviour
          }*/
         p1 = transform.position - offset ;
         p2 = transform.position + offset ;
+
+        /*
+        //visualize the center of spheres
+        GameObject sphere1 = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+        sphere1.transform.position = p1;
+        GameObject sphere2 = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+        sphere2.transform.position = p2;
+        */
+
         if (Physics.CapsuleCast(p1, p2, radius, Vector3.down, out hit, maxDistance, terrainMask))
         {
             Debug.Log("hit something at: " + hit.point.y);
