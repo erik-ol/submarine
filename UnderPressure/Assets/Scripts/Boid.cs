@@ -8,9 +8,11 @@ public class Boid : MonoBehaviour
     // move and face in direction of velocity
     void Update()
     {
-        transform.Translate(velocity * Time.deltaTime * speed);
+        transform.Translate(velocity * Time.deltaTime * speed, Space.World);
         if (velocity != Vector3.zero) {
-            transform.rotation = Quaternion.LookRotation(velocity) * Quaternion.AngleAxis(90, Vector3.right);
+            transform.rotation = Quaternion.LookRotation(velocity);
+            transform.Rotate(90, 0, 0); // relative to own coordinate space
+            Debug.DrawRay(transform.position, velocity);
         }
     }
 }
