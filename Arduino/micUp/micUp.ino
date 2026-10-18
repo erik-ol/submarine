@@ -19,8 +19,11 @@ void loop() {
   else {
     micCount ++;
     if(micCount == 10) {
-      micMaxVal = micMaxVal-1;
+      micMaxVal = micMaxVal-10;
       micCount = 0;
+      Serial.print("Microphone: ");
+      Serial.println(micMaxVal);
+      
     }
   }
 
