@@ -7,10 +7,47 @@
 // In-scattering from multiple scattering (Eq. 9)
 // World Y points up, the water surface is at SurfaceY
 // "depth" is metres below the surface (positive going down)
+
+// ---------------------------------------------------------------------------
+// Caustics helpers
+// ---------------------------------------------------------------------------
+
+// Sample the caustics texture 3 times with small offsets -> r, g, b (dispersion)
+float3 SampleCausticsRGB(UnityTexture2D tex, float2 uv, float split)
+{
+    float r = SAMPLE_TEXTURE2D(tex.tex, tex.samplerstate, uv + float2( split,  split)).r;
+    float g = SAMPLE_TEXTURE2D(tex.tex, tex.samplerstate, uv + float2( split, -split)).r;
+    float b = SAMPLE_TEXTURE2D(tex.tex, tex.samplerstate, uv + float2(-split, -split)).r;
+    return float3(r, g, b);
+}
+
+// Caustics pattern at a world position
+float3 CausticsPattern(UnityTexture2D tex, float3 posWS, float scale, float speed, float split, float time)
+{
+    // Basis perpendicular to the light = pattern is "projected" by the sun
+    #ifdef SHADERGRAPH_PREVIEW
+    float3 L = float3(0, 1, 0);                                 // preview has no lights
+    #else
+    float3 L = _MainLightPosition.xyz;                          // direction towards the light
+    L = dot(L, L) < 1e-6 ? float3(0, 1, 0) : normalize(L);      // fallback: straight down
+    #endif
+    float3 up = abs(L.y) > 0.99 ? float3(1, 0, 0) : float3(0, 1, 0);
+    float3 T  = normalize(cross(up, L));
+    float3 B  = cross(L, T);
+    float2 uv = float2(dot(posWS, T), dot(posWS, B)) / max(scale, 0.01);
+
+    // Two layers with different speed, direction and orientation, combined with min
+    float2 uv1 =  uv + float2(1, 0) * time * speed * 0.75;
+    float2 uv2 = -uv + float2(1, 0) * time * speed;
+    return min(SampleCausticsRGB(tex, uv1, split), SampleCausticsRGB(tex, uv2, split));
+}
+
 void UnderwaterSurface_float(float3 SceneColor, float2 UV, float RawDepth,
                              float SurfaceY, float WaterType, float Turbidity,
-                             float Samples, float MaxDist, float SunIrradiance, 
-                             out float3 Out)
+                             float Samples, float MaxDist, float SunIrradiance,
+                             UnityTexture2D CausticsTex, float CausticsScale, float CausticsSpeed,
+                             float CausticsStrength, float CausticsSplit,
+                             float CausticsDepthFade, float TimeSec, out float3 Out)
 {
     #ifdef SHADERGRAPH_PREVIEW
     Out = SceneColor;
@@ -32,7 +69,18 @@ void UnderwaterSurface_float(float3 SceneColor, float2 UV, float RawDepth,
     float3 rd        = normalize(posWS - camWS); // direction from camera to pixel
     float  camDepth  = max(SurfaceY - camWS.y, 0); // camera: metres below the surface
     float  cosDown   = -rd.y; // +1 looking straight down, -1 straight up
+    
+    // caustics
+    if (!isBackground && CausticsStrength > 0)
+    {
+        float3 caustics = CausticsPattern(CausticsTex, posWS, CausticsScale, CausticsSpeed, CausticsSplit, TimeSec);       
 
+        // caustics get blurrier and weaker further from the surface
+        float depthFade = exp(-depth / max(CausticsDepthFade, 0.01));
+
+        colour *= 1.0 + CausticsStrength * caustics * depthFade;
+    }
+    
     int n = clamp((int)Samples, 1, 32);
     float3 xyz = 0;
     float3 white = 0;

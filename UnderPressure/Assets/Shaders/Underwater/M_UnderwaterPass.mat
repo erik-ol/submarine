@@ -23,6 +23,10 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
+    - _CausticsTex:
+        m_Texture: {fileID: 2800000, guid: 2080d2fafc5f78c48839747773a8bfb2, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - unity_Lightmaps:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -37,12 +41,19 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
+    - _CausticsDepthFade: 16.3
+    - _CausticsScale: 7.12
+    - _CausticsShadowMask: 0.8
+    - _CausticsSpeed: 0.076
+    - _CausticsSplit: 0.00201
+    - _CausticsStrength: 7.59
     - _MaxDist: 100
     - _Samples: 8
-    - _SunIrradiance: 1.52
-    - _SurfaceY: 19.9
-    - _Turbidity: 0.3
-    - _WaterType: 0
+    - _SunIrradiance: 0.19
+    - _SurfaceY: 20.5
+    - _TimeSec: 137.4038
+    - _Turbidity: 0.19
+    - _WaterType: 0.4
     m_Colors: []
   m_BuildTextureStacks: []
   m_AllowLocking: 1
