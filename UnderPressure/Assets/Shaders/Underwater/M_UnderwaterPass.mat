@@ -42,18 +42,18 @@ Material:
     m_Ints: []
     m_Floats:
     - _CausticsDepthFade: 16.3
-    - _CausticsScale: 7.12
+    - _CausticsScale: 14
     - _CausticsShadowMask: 0.8
     - _CausticsSpeed: 0.076
-    - _CausticsSplit: 0.00201
+    - _CausticsSplit: 0.0027
     - _CausticsStrength: 7.59
     - _MaxDist: 100
     - _Samples: 8
     - _SunIrradiance: 0.19
     - _SurfaceY: 20.5
-    - _TimeSec: 137.4038
-    - _Turbidity: 0.19
-    - _WaterType: 0.4
+    - _TimeSec: 0
+    - _Turbidity: 0.24
+    - _WaterType: 0.68
     m_Colors: []
   m_BuildTextureStacks: []
   m_AllowLocking: 1
