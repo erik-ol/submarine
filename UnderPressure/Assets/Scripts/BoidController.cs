@@ -4,16 +4,16 @@ using System.Collections.Generic;
 public class BoidCluster : MonoBehaviour
 {
     List<Boid> boids;
-    public int amount = 10; // amount of boids
-    public float radius = 2f; // radius they spawn in
-    public float avoidDistance = 0.5f; // how close they get before avoid each other
+    public int amount = 100; // amount of boids
+    public float radius = 15f; // radius they spawn in and stay in
+    public float avoidDistance = 0.25f; // how close they get before avoid each other
     float avoidDistanceSquared;
-    public float speed = 0.25f; // speed factor of the boids
-    public float acceleration = 0.5f;
+    public float speed = 1f; // speed factor of the boids
+    public float acceleration = 1f;
     public float speedDecay = 1f; // friction coefficient
-    public float maxSpeed = 2f; // max speed of boids
-    public float clusterStrength = 2f;
-    public float alignmentStrength = 2f;
+    public float maxSpeed = 4f; // max speed of boids
+    public float clusterStrength = 1f;
+    public float alignmentStrength = 1f;
 
     public Boid boidPrefab;
 
