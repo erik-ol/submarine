@@ -130,7 +130,7 @@ GameObject:
   - component: {fileID: 73357551}
   - component: {fileID: 73357550}
   - component: {fileID: 73357549}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Terrain_Test
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -435,15 +435,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3402209196410522759, guid: 8ff6c53b7f88b8743866a911bb6464b9, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 3.6
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3402209196410522759, guid: 8ff6c53b7f88b8743866a911bb6464b9, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 3.53
+      value: -1.31
       objectReference: {fileID: 0}
     - target: {fileID: 3402209196410522759, guid: 8ff6c53b7f88b8743866a911bb6464b9, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -4.1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3402209196410522759, guid: 8ff6c53b7f88b8743866a911bb6464b9, type: 3}
       propertyPath: m_LocalRotation.w
@@ -483,7 +483,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8072449221574159118, guid: 8ff6c53b7f88b8743866a911bb6464b9, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 9013315811647865516, guid: 8ff6c53b7f88b8743866a911bb6464b9, type: 3}
       propertyPath: m_Height
@@ -547,7 +547,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!154 &901973977
 TerrainCollider:
   m_ObjectHideFlags: 0
@@ -643,7 +643,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &961739750
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -807,7 +807,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1717954561962503725, guid: f6336ac4ac8b4d34bc5072418cdc62a0, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1717954561962503726, guid: f6336ac4ac8b4d34bc5072418cdc62a0, type: 3}
       propertyPath: m_LocalScale.x
@@ -933,11 +933,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7fcd9707530c45e46817b28d303a928d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::OriginDepenetration
-  bodyCollider: {fileID: 0}
+  bodyCollider: {fileID: 1415404385}
   obstacleMask:
     serializedVersion: 2
     m_Bits: 4294967295
-  horizontalOnly: 1
+  horizontalOnly: 0
   iterations: 4
 --- !u!1 &1342351663
 GameObject:
@@ -1009,8 +1009,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CollisionDetection
   terrainMask:
     serializedVersion: 2
-    m_Bits: 0
-  connector: {fileID: 0}
+    m_Bits: 8
+  connector: {fileID: 1137059865}
+--- !u!136 &1415404385 stripped
+CapsuleCollider:
+  m_CorrespondingSourceObject: {fileID: 9013315811647865516, guid: 8ff6c53b7f88b8743866a911bb6464b9, type: 3}
+  m_PrefabInstance: {fileID: 741123825}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1467327496
 GameObject:
   m_ObjectHideFlags: 0
