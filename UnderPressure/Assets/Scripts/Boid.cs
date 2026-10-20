@@ -12,7 +12,7 @@ public class Boid : MonoBehaviour
         if (velocity != Vector3.zero) {
             transform.rotation = Quaternion.LookRotation(velocity);
             //transform.Rotate(90, 0, 0); // relative to own coordinate space
-            Debug.DrawRay(transform.position, velocity);
+            //Debug.DrawRay(transform.position, velocity);
         }
     }
 }

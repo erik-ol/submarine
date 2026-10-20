@@ -45,13 +45,13 @@ public class CollisionDetection : MonoBehaviour
 
         if (Physics.CapsuleCast(p1, p2, radius, Vector3.down, out hit, maxDistance, terrainMask))
         {
-            //Debug.Log("hit something at: " + hit.point.y);
+            Debug.Log("hit something at: " + hit.point.y);
 
             if (lastHitPoint.y != hit.point.y)
             {
                 lastHitPoint = hit.point;
                 connector.UpdateBottom(hit.point);
-                //Debug.Log("new bottom at: " + hit.point);
+                Debug.Log("new bottom at: " + hit.point);
             }
 
         }
