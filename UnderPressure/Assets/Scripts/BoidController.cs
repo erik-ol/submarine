@@ -4,17 +4,19 @@ using System.Collections.Generic;
 public class BoidCluster : MonoBehaviour
 {
     List<Boid> boids;
-    public int amount = 100; // amount of boids
-    public float radius = 15f; // radius they spawn in and stay in
-    public float avoidDistance = 0.25f; // how close they get before avoid each other
+    public int amount = 200; // amount of boids
+    public float radius = 20f; // radius they spawn in and stay in - make them follow submarine position?
+    public float viewDistance = 5f; // radius in which they see and follow other boids
+    float viewDistanceSquared;
+    public float avoidDistance = 0.5f; // how close they get before avoid each other
     float avoidDistanceSquared;
     public float speed = 1f; // speed factor of the boids
     public float acceleration = 1f;
     public float speedDecay = 1f; // friction coefficient
     public float maxSpeed = 4f; // max speed of boids
     public float clusterStrength = 1f;
-    public float alignmentStrength = 1f;
-    public float submarineAvoidDistance = 5f;
+    public float alignmentStrength = 2f;
+    public float submarineAvoidDistance = 7f;
     float submarineAvoidDistanceSquared;
 
     public Boid boidPrefab;
@@ -24,6 +26,7 @@ public class BoidCluster : MonoBehaviour
     // spawn in boids randomly in sphere
     void Start() {
 
+        viewDistanceSquared = viewDistance*viewDistance;
         avoidDistanceSquared = avoidDistance*avoidDistance;
         submarineAvoidDistanceSquared = submarineAvoidDistance*submarineAvoidDistance;
 
@@ -57,15 +60,18 @@ public class BoidCluster : MonoBehaviour
                 {
                     // go toward middle of local cluster
                     Vector3 positionDelta = boidOther.transform.position - b.transform.position;
-                    clusterDir += positionDelta.normalized / ((positionDelta.sqrMagnitude * positionDelta.sqrMagnitude) + 0.1f);
 
-                    // align velocity with nearby boids
-                    alignmentDir += boidOther.velocity / ((positionDelta.sqrMagnitude * positionDelta.sqrMagnitude) + 0.1f);
+                    if (positionDelta.sqrMagnitude<viewDistanceSquared) {
+                        clusterDir += positionDelta;
 
-                    // avoid boids that are very close
-                    if (positionDelta.sqrMagnitude < avoidDistanceSquared) {
-                        avoidDir -= positionDelta.normalized / (positionDelta.sqrMagnitude + 0.1f);
-                        avoidStrength += 1-(positionDelta.sqrMagnitude/avoidDistanceSquared);
+                        // align velocity with nearby boids
+                        alignmentDir += boidOther.velocity;
+
+                        // avoid boids that are very close
+                        if (positionDelta.sqrMagnitude < avoidDistanceSquared) {
+                            avoidDir -= positionDelta / (positionDelta.sqrMagnitude + 0.1f);
+                            avoidStrength = System.Math.Max(avoidStrength, 5-positionDelta.sqrMagnitude/avoidDistanceSquared);
+                        }
                     }
                 }
             }
