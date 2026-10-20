@@ -3609,6 +3609,10 @@ PrefabInstance:
       value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 129743792511895525, guid: 05f060f8982f75771928bd872ad7ac3d, type: 3}
+      propertyPath: submarine
+      value: 
+      objectReference: {fileID: 1137059865}
+    - target: {fileID: 129743792511895525, guid: 05f060f8982f75771928bd872ad7ac3d, type: 3}
       propertyPath: speedDecay
       value: 1
       objectReference: {fileID: 0}

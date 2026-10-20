@@ -14,13 +14,18 @@ public class BoidCluster : MonoBehaviour
     public float maxSpeed = 4f; // max speed of boids
     public float clusterStrength = 1f;
     public float alignmentStrength = 1f;
+    public float submarineAvoidDistance = 5f;
+    float submarineAvoidDistanceSquared;
 
     public Boid boidPrefab;
+
+    public ArduinoConnector submarine;
 
     // spawn in boids randomly in sphere
     void Start() {
 
         avoidDistanceSquared = avoidDistance*avoidDistance;
+        submarineAvoidDistanceSquared = submarineAvoidDistance*submarineAvoidDistance;
 
         boids = new List<Boid>();
 
@@ -44,6 +49,7 @@ public class BoidCluster : MonoBehaviour
             Vector3 clusterDir = Vector3.zero;
             Vector3 alignmentDir = Vector3.zero;
             Vector3 avoidDir = Vector3.zero;
+            Vector3 submarineDir = Vector3.zero;
             float avoidStrength = 0;
 
             foreach (Boid boidOther in boids){
@@ -57,22 +63,30 @@ public class BoidCluster : MonoBehaviour
                     alignmentDir += boidOther.velocity / ((positionDelta.sqrMagnitude * positionDelta.sqrMagnitude) + 0.1f);
 
                     // avoid boids that are very close
-                    if (avoidDistanceSquared > positionDelta.sqrMagnitude) {
+                    if (positionDelta.sqrMagnitude < avoidDistanceSquared) {
                         avoidDir -= positionDelta.normalized / (positionDelta.sqrMagnitude + 0.1f);
                         avoidStrength += 1-(positionDelta.sqrMagnitude/avoidDistanceSquared);
                     }
                 }
             }
 
+            float submarineStrength = 0f;
+            Vector3 submarineDelta = submarine.transform.position - b.transform.position;
+            if (submarineDelta.sqrMagnitude < submarineAvoidDistanceSquared)
+            {
+                submarineStrength = 10f;
+                submarineDir = - submarineDelta;
+            }
+
             // don't go too far from cluster spawn
             Vector3 homeDir = transform.position - b.transform.position;
             float homeStrength = System.Math.Max(0.1f, (homeDir.sqrMagnitude / radius) - radius);
 
-            float totalStrength = clusterStrength + alignmentStrength + avoidStrength + homeStrength;
+            float totalStrength = clusterStrength + alignmentStrength + avoidStrength + homeStrength + submarineStrength;
 
             // velocity is updated mid loop, so boids further in the loop will check this instead of the old velocity, should that be changed?
             // each impulse affects velocity proportionally to its strength
-            b.velocity += acceleration * Time.deltaTime * ((clusterDir.normalized * clusterStrength + alignmentDir.normalized * alignmentStrength + avoidDir.normalized * avoidStrength + homeDir.normalized * homeStrength) / totalStrength);
+            b.velocity += acceleration * Time.deltaTime * ((clusterDir.normalized * clusterStrength + alignmentDir.normalized * alignmentStrength + avoidDir.normalized * avoidStrength + homeDir.normalized * homeStrength + submarineDir.normalized * submarineStrength) / totalStrength);
             // speed decays from friciton?
             b.velocity *= speedDecay;
             // clamp on max speed
