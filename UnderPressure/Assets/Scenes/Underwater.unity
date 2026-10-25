@@ -3605,6 +3605,18 @@ PrefabInstance:
       value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 129743792511895525, guid: 05f060f8982f75771928bd872ad7ac3d, type: 3}
+      propertyPath: color.b
+      value: 0.91764706
+      objectReference: {fileID: 0}
+    - target: {fileID: 129743792511895525, guid: 05f060f8982f75771928bd872ad7ac3d, type: 3}
+      propertyPath: color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 129743792511895525, guid: 05f060f8982f75771928bd872ad7ac3d, type: 3}
+      propertyPath: color.r
+      value: 0.7882353
+      objectReference: {fileID: 0}
+    - target: {fileID: 129743792511895525, guid: 05f060f8982f75771928bd872ad7ac3d, type: 3}
       propertyPath: maxSpeed
       value: 4
       objectReference: {fileID: 0}
