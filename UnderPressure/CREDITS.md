@@ -1,6 +1,8 @@
 ﻿## 3D models
 "Pirate Ship LowPoly" (https://skfb.ly/opNXP) by Tarun_xx is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
 "Low-Poly Lighthouse" (https://skfb.ly/o9Up9) by Kaniksu is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+"Free Pack - Rocks Stylized" (https://skfb.ly/pvDxJ) by PolyOne Studio is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+"Treasure Chest 1 - Low Poly" (https://skfb.ly/oRHJY) by Fearless Astro Star is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
 
 ## Textures
 Sand (Yughues Free Sand Materials) | Yughues | Unity Asset Store | Asset Store EULA |
