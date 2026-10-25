@@ -49,9 +49,9 @@ Material:
     - _CausticsStrength: 7.59
     - _MaxDist: 100
     - _Samples: 8
-    - _SunIrradiance: 0.19
-    - _SurfaceY: 20.5
-    - _TimeSec: 0
+    - _SunIrradiance: 0.2
+    - _SurfaceY: 40
+    - _TimeSec: 5.079181
     - _Turbidity: 0.24
     - _WaterType: 0.68
     m_Colors: []
