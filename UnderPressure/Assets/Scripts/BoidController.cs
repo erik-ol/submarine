@@ -19,6 +19,7 @@ public class BoidCluster : MonoBehaviour
     public float submarineAvoidDistance = 7f;
     float submarineAvoidDistanceSquared;
     public Color color;
+    public float scale = 1f;
 
     public Boid boidPrefab;
 
@@ -35,6 +36,7 @@ public class BoidCluster : MonoBehaviour
 
         for (int i = 0; i<amount; i++) {
             Boid b = Instantiate(boidPrefab, transform.position+Random.onUnitSphere*Random.Range(0.0f, radius), Quaternion.identity);
+            b.transform.localScale *= scale;
             b.speed = speed;
             b.velocity = Random.onUnitSphere*maxSpeed/2f;
             var boidRenderer = b.GetComponent<Renderer>();
