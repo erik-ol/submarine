@@ -22,3 +22,4 @@
 - Jerlov water data: Williamson & Hollins, "Measured IOPs of Jerlov water types", Applied Optics, 2022. https://doi.org/10.1364/AO.470464
 - CIE 2006 colour matching functions: http://cvrl.ioo.ucl.ac.uk
 - Caustics technique: Alexander Ameye, "Rendering realtime caustics". https://ameye.dev/notes/realtime-caustics/
+- Water Surface: https://catlikecoding.com/unity/tutorials/flow/looking-through-water/
