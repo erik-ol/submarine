@@ -70,7 +70,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _NormalMap:
-        m_Texture: {fileID: 2800000, guid: c032b7ae86281454cb5dcffc03f3a0c1, type: 3}
+        m_Texture: {fileID: 2800000, guid: aafcada0ac5654069b0824a27cc9f913, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _OcclusionMap:
@@ -99,7 +99,7 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _Absorption: 0.01
+    - _Absorption: 0.001
     - _AddPrecomputedVelocity: 0
     - _AlphaClip: 0
     - _AlphaToMask: 0
@@ -118,9 +118,9 @@ Material:
     - _GlossMapScale: 0
     - _Glossiness: 0
     - _GlossyReflections: 0
-    - _IOR: 1
+    - _IOR: 1.33
     - _Metallic: 0
-    - _NormalStrength: 0.27
+    - _NormalStrength: 0.62
     - _OcclusionStrength: 1
     - _Parallax: 0.005
     - _QueueOffset: 0
@@ -134,7 +134,7 @@ Material:
     - _SrcBlend: 1
     - _SrcBlendAlpha: 1
     - _SunBoost: 6
-    - _SunSize: 0.99486
+    - _SunSize: 0.99521
     - _Surface: 0
     - _Tiling: 0.05
     - _WorkflowMode: 1
@@ -143,9 +143,9 @@ Material:
     m_Colors:
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
-    - _DeepColor: {r: 0.3428711, g: 0.5558306, b: 0.6320754, a: 1}
+    - _DeepColor: {r: 0.007843138, g: 0.078431375, b: 0.15686275, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _MirrorColor: {r: 0.42626378, g: 0.8702219, b: 0.9716981, a: 1}
+    - _MirrorColor: {r: 0.039215688, g: 0.16470589, b: 0.43137255, a: 1}
     - _Scroll1: {r: 0.02, g: 0.01, b: 0, a: 0}
     - _Scroll2: {r: -0.015, g: 0.02, b: 0, a: 0}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
