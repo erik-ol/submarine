@@ -46,7 +46,7 @@ Material:
     - _CausticsShadowMask: 0.8
     - _CausticsSpeed: 0.076
     - _CausticsSplit: 0.0027
-    - _CausticsStrength: 7.59
+    - _CausticsStrength: 20
     - _MaxDist: 100
     - _Samples: 8
     - _SunIrradiance: 0.6
