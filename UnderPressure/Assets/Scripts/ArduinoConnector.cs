@@ -19,7 +19,7 @@ public class ArduinoConnector : MonoBehaviour
     int micBaseline;
     float floatSpeed = 0f;
     float sinkSpeed = 0f;
-    float surface = 50f;
+    float surface = 100f;
     float bottom = 0f; 
     Vector3 target;
 
@@ -141,15 +141,15 @@ public class ArduinoConnector : MonoBehaviour
             }
             else if (micValue > micBaseline + 40 && micValue < micBaseline+80)
             {
-                floatSpeed = 1.5f;
+                floatSpeed = 2.5f;
             }
             else if (micValue > micBaseline + 80 && micValue <micBaseline+120)
             {
-                floatSpeed = 2.0f;
+                floatSpeed = 3.0f;
             }
             else if (micValue > micBaseline + 120)
             {
-                floatSpeed = 3.0f;
+                floatSpeed = 3.5f;
             }
             
 
