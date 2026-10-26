@@ -936,7 +936,7 @@ MonoBehaviour:
   bodyCollider: {fileID: 1415404385}
   obstacleMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 8
   horizontalOnly: 0
   iterations: 4
 --- !u!1 &1342351663
