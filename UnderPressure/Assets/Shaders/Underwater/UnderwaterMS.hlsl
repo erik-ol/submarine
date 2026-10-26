@@ -62,25 +62,91 @@ void UnderwaterSurface_float(float3 SceneColor, float2 UV, float RawDepth,
     bool isBackground = RawDepth >= 0.99999;
     #endif
 
+    // Anything at or above SurfaceY is out of the water (or is a separate water-surface mesh),
+    // so leave it untouched: no caustics, no spectral tint.
+    if (!isBackground && posWS.y > SurfaceY - 0.25)
+    {
+        Out = SceneColor;
+        return;
+    }
+
     float  P      = isBackground ? MaxDist : min(distance(posWS, camWS), MaxDist); // metres of water to the camera
     float3 colour = isBackground ? 0 : SceneColor;
     float  depth  = max(SurfaceY - posWS.y, 0); // metres below the surface
-    
+
     float3 rd        = normalize(posWS - camWS); // direction from camera to pixel
     float  camDepth  = max(SurfaceY - camWS.y, 0); // camera: metres below the surface
     float  cosDown   = -rd.y; // +1 looking straight down, -1 straight up
-    
+
+    // -----------------------------------------------------------------------
+    // Snell's window: what the camera sees when it looks UP at the water surface.
+    // Sky pixels (no geometry) that look upward are refracted through a wavy surface at
+    // SurfaceY. Inside the ~97 degree window you see the sky and the sun; outside it the
+    // surface mirrors the water, so it fades to the normal underwater haze.
+    // The sky is a simple analytic gradient driven by the main light, so it follows SunCycle
+    // (sunrise / noon / sunset / night). The spectral model below then tints it like anything else.
+    // -----------------------------------------------------------------------
+    if (isBackground && rd.y > 0.0 && camDepth > 0.0)
+    {
+        float3 wL = _MainLightPosition.xyz;                       // direction towards the sun
+        wL = dot(wL, wL) < 1e-6 ? float3(0, 1, 0) : normalize(wL);
+        float3 wSunCol = _MainLightColor.rgb;                     // sun colour * intensity
+
+        // where the view ray meets the water surface
+        float  wT   = camDepth / rd.y;                            // metres of water up to the surface
+        float3 wHit = camWS + rd * wT;
+
+        // gentle analytic waves -> surface slope (no texture needed)
+        float2 wp = wHit.xz;
+        float2 wSlope = 0;
+        wSlope += float2( 0.80,  0.60) * 0.080 * cos(dot(wp, float2( 0.80,  0.60)) * 0.60 + TimeSec * 0.90);
+        wSlope += float2(-0.50,  0.87) * 0.050 * cos(dot(wp, float2(-0.50,  0.87)) * 0.95 + TimeSec * 1.30);
+        wSlope += float2( 0.20, -0.98) * 0.040 * cos(dot(wp, float2( 0.20, -0.98)) * 1.70 + TimeSec * 1.90);
+        float3 wN = -normalize(float3(-wSlope.x, 1.0, -wSlope.y)); // surface normal, facing down into the water
+
+        // refraction water -> air (index 1.33); k < 0 means total internal reflection
+        float wCosI = saturate(-dot(rd, wN));
+        float wK    = 1.0 - 1.33 * 1.33 * (1.0 - wCosI * wCosI);
+
+        float3 wWindow = 0;
+        if (wK > 0.0)
+        {
+            float  wCosT = sqrt(wK);
+            float  wF    = 0.02 + 0.98 * pow(1.0 - wCosT, 5.0);   // Fresnel: more mirror towards the window edge
+            float3 wR    = refract(rd, wN, 1.33);                 // ray direction in the air
+
+            float  wH   = saturate(wR.y);
+            float  wDay = smoothstep(-0.10, 0.25, wL.y);          // 0 at night, 1 by midday
+            float  wLow = 1.0 - smoothstep(0.0, 0.45, wL.y);      // 1 when the sun is low
+
+            float3 wZenith  = lerp(float3(0.01, 0.015, 0.05), float3(0.10, 0.32, 0.85), wDay);
+            float3 wHorizon = lerp(float3(0.02, 0.03, 0.08),  float3(0.60, 0.75, 0.95), wDay);
+            wHorizon = lerp(wHorizon, float3(1.0, 0.45, 0.20), wLow * wDay);   // warm horizon at sunrise / sunset
+            float3 wSky = lerp(wHorizon, wZenith, pow(wH, 0.45));
+
+            float wSd = saturate(dot(wR, wL));                    // how close this ray is to the sun
+            wSky += wSunCol * (pow(wSd, 64.0) * 0.5 + smoothstep(0.9995, 1.0, wSd) * 30.0); // glow + sun disc
+
+            wWindow = wSky * (1.0 - wF) * 1.5;                    // 1.5 = overall window brightness
+        }
+
+        // treat the surface as the "object": it is camera-to-surface metres away, at depth 0
+        colour = wWindow;
+        P      = min(wT, MaxDist);
+        depth  = 0;
+    }
+
     // caustics
     if (!isBackground && CausticsStrength > 0)
     {
-        float3 caustics = CausticsPattern(CausticsTex, posWS, CausticsScale, CausticsSpeed, CausticsSplit, TimeSec);       
+        float3 caustics = CausticsPattern(CausticsTex, posWS, CausticsScale, CausticsSpeed, CausticsSplit, TimeSec);
 
         // caustics get blurrier and weaker further from the surface
         float depthFade = exp(-depth / max(CausticsDepthFade, 0.01));
 
         colour *= 1.0 + CausticsStrength * caustics * depthFade;
     }
-    
+
     int n = clamp((int)Samples, 1, 32);
     float3 xyz = 0;
     float3 white = 0;
@@ -90,7 +156,7 @@ void UnderwaterSurface_float(float3 SceneColor, float2 UV, float RawDepth,
     {
         float wl = lerp(400.0, 700.0, (i + 0.5) / n); // centred wavelength samples
         float3 bckd = Turbidity * GetWaterProps(wl, WaterType); // (b, c, Kd)
-        float b  = bckd.x; 
+        float b  = bckd.x;
         float c  = bckd.y;
         float kd = bckd.z;
 
@@ -98,7 +164,7 @@ void UnderwaterSurface_float(float3 SceneColor, float2 UV, float RawDepth,
         float surface = UpsampleRGB(colour, wl)
                       * exp(-kd * depth)   // sunlight: surface -> object
                       * exp(-c * P);       // object -> camera
-        
+
         // Light scattered towards the camera by the water itself (Eq. 9)
         // cMod combines loss along the ray (c) with the sunlight getting weaker
         // as the ray goes deeper (kd * cosDown)
