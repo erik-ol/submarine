@@ -33,12 +33,12 @@ public class ArduinoConnector : MonoBehaviour
         if (initialInput[0] == "Microphone")
         {
             micBaseline = int.Parse(initialInput[1]);
-            Debug.Log("baseline: " +micBaseline);  
+            //Debug.Log("baseline: " +micBaseline);  
         }
         else
         {
             micBaseline = 0; //the baseline often seems to be around here
-            Debug.Log("No baseline found: " +micBaseline);  
+            //Debug.Log("No baseline found: " +micBaseline);  
         }
         serialThread = new Thread(SerialReadLoop);
         serialThread.IsBackground = true;
@@ -50,7 +50,7 @@ public class ArduinoConnector : MonoBehaviour
         if (hitpoint.y > 0)
         {
             bottom = hitpoint.y+1;//1 is the thickness of the submarine
-            Debug.Log("new bottom is here");
+            //Debug.Log("new bottom is here");
         }
         else
         { 
@@ -79,23 +79,23 @@ public class ArduinoConnector : MonoBehaviour
 
             if (input[0] == "Microphone" && int.TryParse(input[1], out int micValue))
             {
-                Debug.Log("entered if mic");
+                //Debug.Log("entered if mic");
                 lock (stateLock)
                 {
                     latestMicValue = micValue;
                     hasNewMicValue = true;
-                    Debug.Log("new mic value");
+                    //Debug.Log("new mic value");
                 }
             }
 
             else if (input[0] == "Potentiometer" && int.TryParse(input[1], out int potValue))
             {
-                Debug.Log("entered if pot");
+                //Debug.Log("entered if pot");
                 lock (stateLock)
                 {
                     latestPotValue = potValue;
                     hasNewPotValue = true;
-                    Debug.Log("new pot value");
+                    //Debug.Log("new pot value");
                 }
             }
         }
@@ -103,8 +103,7 @@ public class ArduinoConnector : MonoBehaviour
    
     
     void Update()
-    {
-
+    {   
         int micValue = 0;
         int potValue = 0;
         bool gotMicValue = false;
@@ -126,14 +125,17 @@ public class ArduinoConnector : MonoBehaviour
             }
         }
 
+        floatSpeed = 0f;
+        sinkSpeed = 0f;
+
         if (gotMicValue)
         {
 
-            Debug.Log("micvalue: " + micValue);
+            //Debug.Log("micvalue: " + micValue);
             if (micBaseline == 0)
             { 
                 micBaseline = micValue;
-                Debug.Log("micbaseline: " + micBaseline);
+                //Debug.Log("micbaseline: " + micBaseline);
             }
             if (micValue < micBaseline + 40)
             {
@@ -151,23 +153,12 @@ public class ArduinoConnector : MonoBehaviour
             {
                 floatSpeed = 3.0f;
             }
-            
-
-                                
-            target =  new Vector3(transform.position.x, surface, transform.position.z); 
-            transform.position = Vector3.MoveTowards(transform.position, target, floatSpeed*Time.deltaTime); 
-
-            // snap once close enough
-            if (Mathf.Abs(transform.position.y - surface) < 0.001f)
-            {
-                transform.position = target;
-            }
 
         }
 
         if (gotPotValue)
         {
-            Debug.Log("potvalue: " + potValue);
+            //Debug.Log("potvalue: " + potValue);
             if (potValue < 128)
             {
                 sinkSpeed = 0f;
@@ -195,22 +186,21 @@ public class ArduinoConnector : MonoBehaviour
             else if (potValue > 896)
             {
                 sinkSpeed = 2.0f;
-            }
-
-                                
-            target =  new Vector3(transform.position.x, bottom, transform.position.z); 
-            transform.position = Vector3.MoveTowards(transform.position, target, sinkSpeed*Time.deltaTime); 
-
-            // snap once close enough
-            if (Mathf.Abs(transform.position.y - bottom) < 0.001f)
-            {
-                transform.position = target;
-            }
-            
+            }    
             
         }
 
-       
+        if (Input.GetKey(KeyCode.Space))
+        {
+            floatSpeed = 3.0f;
+        }
+        
+        if (Input.GetKey(KeyCode.LeftShift))
+        {
+            sinkSpeed = 2.0f;
+        }
+
+        transform.position = new Vector3(transform.position.x, Mathf.Clamp(transform.position.y + (floatSpeed-sinkSpeed)*Time.deltaTime, bottom, surface), transform.position.z);
         
     }
 
