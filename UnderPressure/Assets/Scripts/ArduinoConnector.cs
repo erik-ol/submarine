@@ -23,6 +23,11 @@ public class ArduinoConnector : MonoBehaviour
     float bottom = 0f; 
     Vector3 target;
 
+    // position submarine resets to when you press Reset button (r)
+    public float resetX = 30f;
+    public float resetY = 30f;
+    public float resetZ = 50f;
+
 
     void Start()
     { 
@@ -221,8 +226,13 @@ public class ArduinoConnector : MonoBehaviour
             sinkSpeed = 2.0f;
         }
 
-        transform.position = new Vector3(transform.position.x + dirSide*Time.deltaTime, Mathf.Clamp(transform.position.y + (floatSpeed-sinkSpeed)*Time.deltaTime, bottom, surface), transform.position.z + dirForward*Time.deltaTime);
-        
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            transform.position = new Vector3(resetX, resetY, resetZ);
+        } else
+        {
+            transform.position = new Vector3(transform.position.x + dirSide*Time.deltaTime, Mathf.Clamp(transform.position.y + (floatSpeed-sinkSpeed)*Time.deltaTime, bottom, surface), transform.position.z + dirForward*Time.deltaTime);
+        }
     }
 
    void OnApplicationQuit()
