@@ -190,6 +190,27 @@ public class ArduinoConnector : MonoBehaviour
             
         }
 
+        // todo: make foward movement with keys depend on vr look direction
+        float dirForward = 0f;
+        float dirSide = 0f;
+
+        if (Input.GetKey(KeyCode.W))
+        {
+            dirForward += 1;
+        }
+        if (Input.GetKey(KeyCode.S))
+        {
+            dirForward -= 1;
+        }
+        if (Input.GetKey(KeyCode.A))
+        {
+            dirSide -= 1;
+        }
+        if (Input.GetKey(KeyCode.D))
+        {
+            dirSide += 1;
+        }
+
         if (Input.GetKey(KeyCode.Space))
         {
             floatSpeed = 3.0f;
@@ -200,7 +221,7 @@ public class ArduinoConnector : MonoBehaviour
             sinkSpeed = 2.0f;
         }
 
-        transform.position = new Vector3(transform.position.x, Mathf.Clamp(transform.position.y + (floatSpeed-sinkSpeed)*Time.deltaTime, bottom, surface), transform.position.z);
+        transform.position = new Vector3(transform.position.x + dirSide*Time.deltaTime, Mathf.Clamp(transform.position.y + (floatSpeed-sinkSpeed)*Time.deltaTime, bottom, surface), transform.position.z + dirForward*Time.deltaTime);
         
     }
 
