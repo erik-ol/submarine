@@ -2404,8 +2404,9 @@ MonoBehaviour:
   obstacleMask:
     serializedVersion: 2
     m_Bits: 8
-  horizontalOnly: 0
+  horizontalOnly: 1
   iterations: 4
+  crash: {fileID: 8300000, guid: 674dc60612201ca47af9adac063a8249, type: 3}
 --- !u!1001 &1144649656
 PrefabInstance:
   m_ObjectHideFlags: 0
