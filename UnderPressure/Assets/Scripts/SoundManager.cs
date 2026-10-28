@@ -2,8 +2,8 @@ using UnityEngine;
 
 public class SoundManager : MonoBehaviour
 {
-    public static SoundManager Instance; 
-    [SerializeField] private AudioSource sfxAudioSource;
+    public static SoundManager Instance;
+    [SerializeField] private AudioSource AudioSource;
 
     private void Awake ()
     {
@@ -14,6 +14,6 @@ public class SoundManager : MonoBehaviour
     }
     public void PlaySound(AudioClip clip)
     {
-        sfxAudioSource.PlayOneShot(clip);
+        AudioSource.PlayOneShot(clip);
     }
 }
