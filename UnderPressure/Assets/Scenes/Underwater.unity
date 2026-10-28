@@ -353,6 +353,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1137059864}
     m_Modifications:
+    - target: {fileID: -7836950911280300497, guid: f427920094b086d46a3bfc74375bd316, type: 3}
+      propertyPath: connector
+      value: 
+      objectReference: {fileID: 1137059865}
     - target: {fileID: -2550620967690922775, guid: f427920094b086d46a3bfc74375bd316, type: 3}
       propertyPath: m_Height
       value: 6.32
@@ -383,15 +387,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5335650149156490585, guid: f427920094b086d46a3bfc74375bd316, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.6201172
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5335650149156490585, guid: f427920094b086d46a3bfc74375bd316, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -74.040405
+      value: -4.89
       objectReference: {fileID: 0}
     - target: {fileID: 5335650149156490585, guid: f427920094b086d46a3bfc74375bd316, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -2.7779846
+      value: -3.39
       objectReference: {fileID: 0}
     - target: {fileID: 5335650149156490585, guid: f427920094b086d46a3bfc74375bd316, type: 3}
       propertyPath: m_LocalRotation.w
@@ -2452,7 +2456,7 @@ MonoBehaviour:
     m_Bits: 8
   horizontalOnly: 1
   iterations: 4
-  crash: {fileID: 8300000, guid: 674dc60612201ca47af9adac063a8249, type: 3}
+  crash: {fileID: 8300000, guid: 7b547b42190bd5c4980440aeba8cb800, type: 3}
 --- !u!114 &1137059877
 MonoBehaviour:
   m_ObjectHideFlags: 0
