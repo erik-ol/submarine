@@ -20,6 +20,7 @@ public class BoidCluster : MonoBehaviour
     float submarineAvoidDistanceSquared;
     public Color color;
     public float scale = 1f;
+    public bool followSubmarine = false;
 
     public Boid boidPrefab;
 
@@ -117,7 +118,9 @@ public class BoidCluster : MonoBehaviour
             }
 
             // don't go too far from cluster spawn
-            Vector3 homeDir = transform.position - b.transform.position;
+            Vector3 homePos = transform.position;
+            if (followSubmarine) homePos = submarine.transform.position;
+            Vector3 homeDir = homePos - b.transform.position;
             float homeStrength = System.Math.Max(0.1f, (homeDir.sqrMagnitude / radius) - radius);
 
             float totalStrength = clusterStrength + alignmentStrength + avoidStrength + homeStrength + submarineStrength;
