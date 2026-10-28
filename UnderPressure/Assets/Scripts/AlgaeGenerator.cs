@@ -73,19 +73,43 @@ public class AlgaeGenerator : MonoBehaviour
             switch(j)
             {
                 case 'B':
-                    turtle.transform.Translate(Vector3.up*length); 
-                    Instantiate(branch, turtle.transform.position, turtle.transform.rotation, Algae.transform);
+                    //turtle.transform.Translate(Vector3.up*length); 
+                    GameObject Branch = Instantiate(branch, turtle.transform.position, turtle.transform.rotation, Algae.transform);
+                    GameObject bBottom = Branch.transform.Find("bottom").gameObject;
+                    // Calculate offset between prefab origin and bottom
+                    Vector3 bOffset = Branch.transform.position - bBottom.transform.position;
+                    // Move the entire prefab so its bottom matches the turtle position
+                    Branch.transform.position += bOffset;
 
+                    //make sure the turtle go to the top of the branch for next placement
+                    GameObject top = Branch.transform.Find("Top").gameObject;
+                    turtle.transform.position = top.transform.position;
                     break;
 
                 case 'S': 
-                    turtle.transform.Translate(Vector3.up*length); 
-                    Instantiate(stolon, turtle.transform.position, turtle.transform.rotation, Algae.transform);
+                    //turtle.transform.Translate(Vector3.up*length); 
+                    GameObject Stolon = Instantiate(stolon, turtle.transform.position, turtle.transform.rotation, Algae.transform);
+                    //prefabs pivot point is in the center so we need to fint the bottom
+                    GameObject sBottom = Stolon.transform.Find("bottom").gameObject;
+                    // Calculate offset between prefab origin and bottom
+                    Vector3 sOffset = Stolon.transform.position - sBottom.transform.position;
+                    // Move the entire prefab so its bottom matches the turtle position
+                    Stolon.transform.position += sOffset;
+                    //sBottom.transform.position = turtle.transform.position;
+                    //turtle.transform.position = bottom.transform.position;
+                    //nothing is placed on filaments or stolons top, so no need to change the turtles position in this case
                     break;
 
                 case 'F':
-                    turtle.transform.Translate(Vector3.up*length); 
-                    Instantiate(filament,turtle.transform.position, turtle.transform.rotation, Algae.transform);
+                    //turtle.transform.Translate(Vector3.up*length); 
+                    GameObject Filament = Instantiate(filament,turtle.transform.position, turtle.transform.rotation, Algae.transform);
+                     //prefabs pivot point is in the center so we need to fint the bottom
+                    GameObject fBottom = Filament.transform.Find("bottom").gameObject;
+                    // Calculate offset between prefab origin and bottom
+                    Vector3 fOffset = Filament.transform.position - fBottom.transform.position;
+                    // Move the entire prefab so its bottom matches the turtle position
+                    Filament.transform.position += fOffset;
+                
                     break;
 
                     //Vector3.right - around x.axis, Vector3.up - Y axis Vector3.forward - Z axis.
