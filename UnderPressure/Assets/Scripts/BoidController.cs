@@ -25,6 +25,11 @@ public class BoidCluster : MonoBehaviour
 
     public ArduinoConnector submarine;
 
+    public float deactivationDistance = 50f;
+
+    bool active = true;
+
+
     // spawn in boids randomly in sphere
     void Start() {
 
@@ -51,6 +56,25 @@ public class BoidCluster : MonoBehaviour
     // update velocity of all boids
     void Update()
     {
+        Vector3 submarineToClusterCenterDelta = submarine.transform.position - transform.position;
+        if (submarineToClusterCenterDelta.sqrMagnitude>deactivationDistance*deactivationDistance) {
+            if (active)
+            {
+                active = false;
+                foreach (Boid b in boids)
+                {
+                    b.gameObject.SetActive(false);
+                }
+
+                return;
+            }
+        } else if (!active) {
+            active = true;
+            foreach (Boid b in boids)
+            {
+                b.gameObject.SetActive(true);
+            }
+        }
 
         foreach (Boid b in boids){
 
