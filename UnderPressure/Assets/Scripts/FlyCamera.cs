@@ -27,7 +27,7 @@ public class FlyCamera : MonoBehaviour
         Vector2 mouseDelta = Vector2.zero;
         Vector3 move = Vector3.zero;
         bool looking = false, fast = false;
-        float scroll = 0f;
+        //float scroll = 0f;
 
 #if ENABLE_INPUT_SYSTEM
         var kb = Keyboard.current;
