@@ -391,11 +391,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5335650149156490585, guid: f427920094b086d46a3bfc74375bd316, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -4.89
+      value: -3.65
       objectReference: {fileID: 0}
     - target: {fileID: 5335650149156490585, guid: f427920094b086d46a3bfc74375bd316, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -3.39
+      value: -0.62
       objectReference: {fileID: 0}
     - target: {fileID: 5335650149156490585, guid: f427920094b086d46a3bfc74375bd316, type: 3}
       propertyPath: m_LocalRotation.w
@@ -403,7 +403,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5335650149156490585, guid: f427920094b086d46a3bfc74375bd316, type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5335650149156490585, guid: f427920094b086d46a3bfc74375bd316, type: 3}
       propertyPath: m_LocalRotation.y
@@ -411,7 +411,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5335650149156490585, guid: f427920094b086d46a3bfc74375bd316, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5335650149156490585, guid: f427920094b086d46a3bfc74375bd316, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -2438,6 +2438,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e0c630dc972d01b4faf78322a2a09bb4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ArduinoConnector
+  keyboardMoveSpeed: 10
+  resetX: 30
+  resetY: 30
+  resetZ: 50
 --- !u!114 &1137059871
 MonoBehaviour:
   m_ObjectHideFlags: 0
