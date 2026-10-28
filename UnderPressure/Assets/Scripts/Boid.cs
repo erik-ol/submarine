@@ -21,6 +21,7 @@ public class Boid : MonoBehaviour
         if (transform.position.y > surface)
         {
             transform.position = new Vector3(transform.position.x, surface, transform.position.z);
+            velocity.y = velocity.y * 0.9f;
         }
     }
 }

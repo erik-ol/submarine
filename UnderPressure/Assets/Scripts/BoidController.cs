@@ -26,7 +26,7 @@ public class BoidCluster : MonoBehaviour
 
     public ArduinoConnector submarine;
 
-    public float deactivationDistance = 50f;
+    public float deactivationDistance = 200f;
 
     bool active = true;
 
