@@ -118,10 +118,8 @@ namespace UnityEngine.XR.Interaction.Toolkit.Samples.StarterAssets
             // This is the same check as the base method.
             if (input == Vector2.zero)
             {
-                //radar.Stop();
                 return base.ComputeDesiredMove(input);
             }
-            //radar.Play(0);
 
             // Initialize the Head Transform if necessary, getting the Camera from XR Origin
             if (m_HeadTransform == null)
