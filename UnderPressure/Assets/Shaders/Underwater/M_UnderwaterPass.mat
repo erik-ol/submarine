@@ -51,7 +51,7 @@ Material:
     - _Samples: 8
     - _SunIrradiance: 0.6
     - _SurfaceY: 194
-    - _TimeSec: 231.49019
+    - _TimeSec: 0
     - _Turbidity: 0.1
     - _WaterType: 0.44
     m_Colors: []
