@@ -1,5 +1,6 @@
 using UnityEngine;
-using System.Collections.Generic; //should use System.Collections.Generic
+using System.Collections.Generic;
+//should use System.Collections.Generic
 
 public class AlgaeGenerator : MonoBehaviour
 {
@@ -45,13 +46,34 @@ public class AlgaeGenerator : MonoBehaviour
             expandedAlgae = "";
             foreach (char j in algae)
             {
-                expandedAlgae += j switch
+                float weightFactor = Random.Range(0.1f, 1.0f);
+                switch(j)
                 {
-                'B' => "B-[S]-[F]",
-                'S' => "S",
-                'F' => "BF", 
-                _ => j.ToString()
-                };
+                    case 'B': 
+                        if (weightFactor < 0.45f)
+                            expandedAlgae += "B[-S]<[[F]/[F]]+"; 
+                        else
+                            expandedAlgae += "B[B]>[B]";
+                        break;
+                    case 'S': 
+                        if (weightFactor<0.45f)
+                            expandedAlgae += "[S]<[S]>[S]"; 
+                        else
+                            expandedAlgae += "[-S][-S]>[-S]";
+                        break;
+                    case 'F':
+                        if (weightFactor < 0.4f)
+                            expandedAlgae += "[F][B]";
+                        else if (weightFactor >= 0.4f && weightFactor <0.9)
+                            expandedAlgae += "[–B[F]-[F]-»[F]-\\[F]-/ / [F]-»[F]]";
+                        else
+                            expandedAlgae += "[B[F]-[F]-»[F]++\\[F]–[F]+-//[F]–[F]]";
+                        break;
+                    default: 
+                        expandedAlgae += j.ToString(); 
+                        break;
+                }
+
             }
             algae = expandedAlgae;
             Debug.Log("Algae at iteration " + i + "is " + algae);
@@ -151,6 +173,8 @@ public class AlgaeGenerator : MonoBehaviour
                     turtle.transform.position = helper.position;
                     turtle.transform.rotation = helper.rotation;
                     break;
+
+                Debug.Log("Nothing fit for char: " + j);
 
             }
         }
