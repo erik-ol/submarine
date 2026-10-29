@@ -19,7 +19,7 @@ public class ArduinoConnector : MonoBehaviour
     int micBaseline;
     float floatSpeed = 0f;
     float sinkSpeed = 0f;
-    float surface = 190f;
+    float surface = 50f;
     float bottom = 0f; 
     Vector3 target;
 

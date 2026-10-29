@@ -1,4 +1,3 @@
-using Microsoft.VisualBasic;
 using UnityEngine;
 
 public class OriginDepenetration : MonoBehaviour
@@ -7,8 +6,6 @@ public class OriginDepenetration : MonoBehaviour
     public LayerMask obstacleMask = ~0;    // walls, props, etc.
     public bool horizontalOnly = true;
     public int iterations = 4;
-    public AudioClip crash;
-
 
     readonly Collider[] hits = new Collider[16];
 
@@ -31,7 +28,6 @@ public class OriginDepenetration : MonoBehaviour
                         other, other.transform.position, other.transform.rotation,
                         out Vector3 dir, out float dist))
                 {
-                    SoundManager.Instance.PlaySound(crash);
                     if (horizontalOnly) { dir.y = 0; dir.Normalize(); }
                     transform.position += dir * dist;
                     moved = true;
