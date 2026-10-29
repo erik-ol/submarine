@@ -9,6 +9,32 @@
 // "depth" is metres below the surface (positive going down)
 
 // ---------------------------------------------------------------------------
+// Submarine lamp (global values, set every frame by SubLamp.cs)
+// ---------------------------------------------------------------------------
+float4 _UWLampPos;     // xyz: lamp position (world)
+float4 _UWLampDir;     // xyz: lamp direction (world, normalized)
+float4 _UWLampParams;  // x: cos(half cone angle), y: intensity, z: beam range (m), w: 1 = lamp on
+float4 _UWLampColor;   // rgb: lamp colour (linear), a: beam strength
+
+// How much of the lamp's cone covers point p (0 outside, 1 in the centre)
+// and distance from the lamp to p
+float LampCone(float3 p, out float dist)
+{
+    float3 toP  = p - _UWLampPos.xyz;
+    dist        = length(toP);
+    float cosA  = dot(toP / max(dist, 1e-4), _UWLampDir.xyz);
+    float cosOuter = _UWLampParams.x;
+    return smoothstep(cosOuter, lerp(cosOuter, 1.0, 0.6), cosA);
+}
+
+// Interleaved gradient noise (Jimenez 2014): neighbouring pixels get evenly spread offsets
+float UWHash(float2 p)
+{
+    return frac(52.9829189 * frac(dot(p, float2(0.06711056, 0.00583715))));
+}
+
+
+// ---------------------------------------------------------------------------
 // Caustics helpers
 // ---------------------------------------------------------------------------
 
@@ -42,6 +68,9 @@ float3 CausticsPattern(UnityTexture2D tex, float3 posWS, float scale, float spee
     return min(SampleCausticsRGB(tex, uv1, split), SampleCausticsRGB(tex, uv2, split));
 }
 
+// ---------------------------------------------------------------------------
+// Main function 
+// ---------------------------------------------------------------------------
 void UnderwaterSurface_float(float3 SceneColor, float2 UV, float RawDepth,
                              float SurfaceY, float WaterType, float Turbidity,
                              float Samples, float MaxDist, float SunIrradiance,
@@ -62,8 +91,7 @@ void UnderwaterSurface_float(float3 SceneColor, float2 UV, float RawDepth,
     bool isBackground = RawDepth >= 0.99999;
     #endif
 
-    // Anything at or above SurfaceY is out of the water (or is a separate water-surface mesh),
-    // so leave it untouched: no caustics, no spectral tint.
+    // Anything at or above SurfaceY is out of the water, so leave untouched: no caustics, no spectral tint
     if (!isBackground && posWS.y > SurfaceY - 0.25)
     {
         Out = SceneColor;
@@ -135,6 +163,18 @@ void UnderwaterSurface_float(float3 SceneColor, float2 UV, float RawDepth,
         P      = min(wT, MaxDist);
         depth  = 0;
     }
+    
+    float3 baseColour = colour;   // colour without caustics (used for the lamp light)
+    
+    // Lamp light reaching this surface point (inverse square, inside the cone)
+    bool  lampOn        = _UWLampParams.w > 0.5;
+    float lampOnSurface = 0;
+    float lampDist      = 0;
+    if (lampOn && !isBackground)
+    {
+        float cone = LampCone(posWS, lampDist);
+        lampOnSurface = cone * _UWLampParams.y / max(lampDist * lampDist, 1.0);
+    }
 
     // caustics
     if (!isBackground && CausticsStrength > 0)
@@ -161,8 +201,11 @@ void UnderwaterSurface_float(float3 SceneColor, float2 UV, float RawDepth,
         float kd = bckd.z;
 
         // Light from the object (Eq. 10)
-        float surface = UpsampleRGB(colour, wl)
-                      * exp(-kd * depth)   // sunlight: surface -> object
+        //   sunlight: comes down from the surface -> attenuated by depth (Kd)
+        //   lamp:     comes from the lamp         -> attenuated by lamp-to-object distance (c)
+        float sunLight  = exp(-kd * depth);
+        float lampLight = lampOnSurface * UpsampleRGB(_UWLampColor.rgb, wl) * exp(-c * lampDist);
+        float surface = (UpsampleRGB(colour, wl) * sunLight + UpsampleRGB(baseColour, wl) * lampLight)
                       * exp(-c * P);       // object -> camera
 
         // Light scattered towards the camera by the water itself (Eq. 9)
@@ -181,7 +224,37 @@ void UnderwaterSurface_float(float3 SceneColor, float2 UV, float RawDepth,
     }
 
     // XYZ -> screen colour, white-balanced so white stays white with no water
-    Out = max(0, XYZToLinearSRGB(xyz) / XYZToLinearSRGB(white));
+    float3 rgb = max(0, XYZToLinearSRGB(xyz) / XYZToLinearSRGB(white));
+    
+    // Lamp beam: single scattering along the view ray.
+    // March from the camera; at each step, light that travelled lamp -> point -> camera
+    // and was scattered once towards the camera. One wavelength (550 nm) to keep it cheap
+    if (lampOn)
+    {
+        float3 bc = Turbidity * GetWaterProps(550.0, WaterType); // (b, c, Kd) at 550 nm
+        float marchDist = min(P, _UWLampParams.z);
+        const int STEPS = 32;
+        float dt = marchDist / STEPS;
+        float jitter = UWHash(UV * _ScreenParams.xy);
+        float acc = 0;
+
+        [loop]
+        for (int s = 0; s < STEPS; s++)
+        {
+            float  t = (s + jitter) * dt;      // distance from the camera
+            float3 x = camWS + rd * t;         // point on the view ray
+            float  dl;                         // distance from the lamp
+            float  cone = LampCone(x, dl);
+            float nearFade = smoothstep(0.5, 3.0, dl);   // beam fades in over the first ~3 m from the lamp
+            acc += cone * nearFade * exp(-bc.y * (t + dl)) / (1.0 + dl * dl);
+        }
+
+        rgb += _UWLampColor.rgb
+             * (_UWLampParams.y * _UWLampColor.a * bc.x / (4.0 * PI))   // intensity * scattering * isotropic phase
+             * acc * dt;
+    }
+
+    Out = rgb;
     #endif
 }
 
