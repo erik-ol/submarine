@@ -1143,7 +1143,7 @@
     "m_LiteralFloatMode": false,
     "m_RangeValues": {
         "x": 1.0,
-        "y": 30.0
+        "y": 200.0
     },
     "m_SliderType": 0,
     "m_SliderPower": 3.0,
@@ -2606,7 +2606,7 @@
     "m_LiteralFloatMode": false,
     "m_RangeValues": {
         "x": 0.0,
-        "y": 300.0
+        "y": 200.0
     },
     "m_SliderType": 0,
     "m_SliderPower": 3.0,
