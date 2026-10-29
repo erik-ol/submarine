@@ -20,10 +20,16 @@ public class BoidCluster : MonoBehaviour
     float submarineAvoidDistanceSquared;
     public Color color;
     public float scale = 1f;
+    public bool followSubmarine = false;
 
     public Boid boidPrefab;
 
     public ArduinoConnector submarine;
+
+    public float deactivationDistance = 200f;
+
+    bool active = true;
+
 
     // spawn in boids randomly in sphere
     void Start() {
@@ -51,6 +57,25 @@ public class BoidCluster : MonoBehaviour
     // update velocity of all boids
     void Update()
     {
+        Vector3 submarineToClusterCenterDelta = submarine.transform.position - transform.position;
+        if (submarineToClusterCenterDelta.sqrMagnitude>deactivationDistance*deactivationDistance) {
+            if (active)
+            {
+                active = false;
+                foreach (Boid b in boids)
+                {
+                    b.gameObject.SetActive(false);
+                }
+
+                return;
+            }
+        } else if (!active) {
+            active = true;
+            foreach (Boid b in boids)
+            {
+                b.gameObject.SetActive(true);
+            }
+        }
 
         foreach (Boid b in boids){
 
@@ -93,7 +118,9 @@ public class BoidCluster : MonoBehaviour
             }
 
             // don't go too far from cluster spawn
-            Vector3 homeDir = transform.position - b.transform.position;
+            Vector3 homePos = transform.position;
+            if (followSubmarine) homePos = submarine.transform.position;
+            Vector3 homeDir = homePos - b.transform.position;
             float homeStrength = System.Math.Max(0.1f, (homeDir.sqrMagnitude / radius) - radius);
 
             float totalStrength = clusterStrength + alignmentStrength + avoidStrength + homeStrength + submarineStrength;
