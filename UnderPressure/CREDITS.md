@@ -9,7 +9,17 @@
 - "Fan Coral Cluster Low" (https://skfb.ly/oyyPI) by Valery.Li is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
 - "Fan Coral Med" (https://skfb.ly/oyyOH) by Valery.Li is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
 - "Aquariumplants (Java Fern, Vallisneria etc)" (https://skfb.ly/pGKWr) by Nullified is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
-- 
+- "Barrel" (https://skfb.ly/otEox) by DJMaesen is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+- "Sunken Anchor" (https://skfb.ly/onBsP) by guillaume.biju-duval is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+- "Roman Coins" (https://skfb.ly/6VKWw) by denis_cliofas is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+- "Small silver jewlery box" (https://skfb.ly/6WKST) by Peter Nox is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+- "Low-poly crab" (https://skfb.ly/pHMSU) by TenderMeatPopsicle is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+- "Seaweed" (https://skfb.ly/oHV9n) by OwenCalingasan is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+- Coral Reef Set3 by MiniPoly [CC-BY] (https://creativecommons.org/licenses/by/3.0/) via Poly Pizza (https://poly.pizza/m/UyswwdHFiL)
+- "Statue" (https://skfb.ly/opuMP) by DJMaesen is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+- "Low Poly Pillar" (https://skfb.ly/osTGq) by Tibsy is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+- "Column low poly" (https://skfb.ly/oNEz6) by Moryak is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+- "Standing Woman - Low Poly" (https://skfb.ly/6sRDv) by Owlish Media is licensed under CC Attribution-NonCommercial-ShareAlike (http://creativecommons.org/licenses/by-nc-sa/4.0/).
 
 
 

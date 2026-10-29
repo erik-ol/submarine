@@ -41,7 +41,7 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _CausticsDepthFade: 16.3
+    - _CausticsDepthFade: 173.7
     - _CausticsScale: 14
     - _CausticsShadowMask: 0.8
     - _CausticsSpeed: 0.076
@@ -49,10 +49,10 @@ Material:
     - _CausticsStrength: 20
     - _MaxDist: 100
     - _Samples: 8
-    - _SunIrradiance: 0.6
-    - _SurfaceY: 40
+    - _SunIrradiance: 1.3
+    - _SurfaceY: 199
     - _TimeSec: 0
-    - _Turbidity: 0.1
+    - _Turbidity: 0.14
     - _WaterType: 0.44
     m_Colors: []
   m_BuildTextureStacks: []
